@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/slack-io/slacker"
 	"github.com/slack-go/slack"
+	"github.com/slack-go/slack/socketmode"
+	"github.com/slack-io/slacker"
 )
 
 // Show cases having one handler for all interactions
@@ -14,7 +15,7 @@ import (
 func main() {
 	bot := slacker.NewClient(os.Getenv("SLACK_BOT_TOKEN"), os.Getenv("SLACK_APP_TOKEN"))
 
-	bot.UnsupportedInteractionHandler(func(ctx *slacker.InteractionContext) {
+	bot.UnsupportedInteractionHandler(func(ctx *slacker.InteractionContext, req *socketmode.Request) {
 		callback := ctx.Callback()
 		if callback.Type != slack.InteractionTypeBlockActions {
 			return

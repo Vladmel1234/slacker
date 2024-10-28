@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/slack-io/slacker"
 	"github.com/slack-go/slack"
+	"github.com/slack-go/slack/socketmode"
+	"github.com/slack-io/slacker"
 )
 
 // Show cases interaction middlewares
@@ -48,7 +49,7 @@ func slackerCmd(blockID string) slacker.CommandHandler {
 	}
 }
 
-func slackerInteractive(ctx *slacker.InteractionContext) {
+func slackerInteractive(ctx *slacker.InteractionContext, req *socketmode.Request) {
 	text := ""
 	action := ctx.Callback().ActionCallback.BlockActions[0]
 	switch action.ActionID {
@@ -65,14 +66,14 @@ func slackerInteractive(ctx *slacker.InteractionContext) {
 
 func LoggingInteractionMiddleware() slacker.InteractionMiddlewareHandler {
 	return func(next slacker.InteractionHandler) slacker.InteractionHandler {
-		return func(ctx *slacker.InteractionContext) {
+		return func(ctx *slacker.InteractionContext, req *socketmode.Request) {
 			ctx.Logger().Info("logging interaction middleware",
 				"user_id", ctx.Callback().User.ID,
 				"interaction_id", ctx.Definition().InteractionID,
 				"action_id", ctx.Callback().ActionCallback.BlockActions[0].ActionID,
 				"channel_id", ctx.Callback().Channel.ID,
 			)
-			next(ctx)
+			next(ctx, req)
 		}
 	}
 }
