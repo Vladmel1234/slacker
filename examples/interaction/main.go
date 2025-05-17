@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/slack-io/slacker"
 	"github.com/slack-go/slack"
+	"github.com/slack-go/slack/socketmode"
+	"github.com/slack-io/slacker"
 )
 
 // Implements a basic interactive command.
@@ -47,7 +48,7 @@ func slackerCmd(blockID string) slacker.CommandHandler {
 	}
 }
 
-func slackerInteractive(ctx *slacker.InteractionContext) {
+func slackerInteractive(ctx *slacker.InteractionContext, req *socketmode.Request) {
 	text := ""
 	action := ctx.Callback().ActionCallback.BlockActions[0]
 	switch action.ActionID {

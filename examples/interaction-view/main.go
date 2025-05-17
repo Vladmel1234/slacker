@@ -6,8 +6,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/slack-io/slacker"
 	"github.com/slack-go/slack"
+	"github.com/slack-go/slack/socketmode"
+	"github.com/slack-io/slacker"
 )
 
 var moodSurveyView = slack.ModalViewRequest{
@@ -100,7 +101,7 @@ func moodCmdHandler(ctx *slacker.CommandContext) {
 	}
 }
 
-func moodViewHandler(ctx *slacker.InteractionContext) {
+func moodViewHandler(ctx *slacker.InteractionContext, req *socketmode.Request) {
 	switch ctx.Callback().Type {
 	case slack.InteractionTypeViewSubmission:
 		{

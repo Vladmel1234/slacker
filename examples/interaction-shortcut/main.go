@@ -6,8 +6,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/slack-io/slacker"
 	"github.com/slack-go/slack"
+	"github.com/slack-go/slack/socketmode"
+	"github.com/slack-io/slacker"
 )
 
 // Implements a basic interactive command with modal view.
@@ -40,7 +41,7 @@ func main() {
 	}
 }
 
-func moodShortcutHandler(ctx *slacker.InteractionContext) {
+func moodShortcutHandler(ctx *slacker.InteractionContext, req *socketmode.Request) {
 	switch ctx.Callback().Type {
 	case slack.InteractionTypeMessageAction:
 		{
