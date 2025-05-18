@@ -452,7 +452,7 @@ func (s *Slacker) handleInteractionEvent(ctx context.Context, callback *slack.In
 	var definition *InteractionDefinition
 
 	switch callback.Type {
-	case slack.InteractionTypeBlockActions, slack.InteractionTypeBlockSuggestion:
+	case slack.InteractionTypeBlockActions:
 		for _, i := range s.interactions[callback.Type] {
 			for _, a := range callback.ActionCallback.BlockActions {
 				definition = i.Definition()
@@ -462,6 +462,14 @@ func (s *Slacker) handleInteractionEvent(ctx context.Context, callback *slack.In
 				}
 			}
 			if interaction != nil {
+				break
+			}
+		}
+	case slack.InteractionTypeBlockSuggestion:
+		for _, i := range s.interactions[callback.Type] {
+			definition = i.Definition()
+			if definition.InteractionID == callback.ActionID {
+				interaction = i
 				break
 			}
 		}
